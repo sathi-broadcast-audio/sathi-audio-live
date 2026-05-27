@@ -11,12 +11,12 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460); color: #fff; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 15px; }
         
-        /* Sign Up / Name Input Popup */
+        /* Sign Up / Registration Popup */
         .login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 15, 26, 0.95); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 20px; transition: 0.5s; }
-        .login-box { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 20px; padding: 30px 20px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); backdrop-filter: blur(10px); }
-        .login-logo { font-size: 40px; color: #ff4757; margin-bottom: 15px; animation: pulse 2s infinite; }
-        .login-title { font-size: 24px; font-weight: bold; margin-bottom: 25px; background: linear-gradient(to right, #ff4757, #ff6b81); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .login-input { width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; padding: 12px 20px; color: white; font-size: 16px; outline: none; text-align: center; margin-bottom: 20px; transition: 0.3s; }
+        .login-box { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 20px; padding: 25px 20px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); backdrop-filter: blur(10px); }
+        .login-logo { font-size: 35px; color: #ff4757; margin-bottom: 10px; animation: pulse 2s infinite; }
+        .login-title { font-size: 22px; font-weight: bold; margin-bottom: 20px; background: linear-gradient(to right, #ff4757, #ff6b81); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .login-input { width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; padding: 10px 20px; color: white; font-size: 14px; outline: none; text-align: center; margin-bottom: 15px; transition: 0.3s; }
         .login-input:focus { border-color: #00adb5; box-shadow: 0 0 10px rgba(0, 173, 181, 0.4); }
         .btn-enter { width: 100%; background: linear-gradient(to right, #00adb5, #00fff2); color: #1a1a2e; font-weight: bold; border: none; padding: 12px; border-radius: 30px; font-size: 16px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(0, 173, 181, 0.3); }
         .btn-enter:hover { transform: scale(1.02); }
@@ -27,8 +27,8 @@
         /* Header & Logo */
         .header { text-align: center; margin-bottom: 15px; width: 100%; max-width: 500px; }
         .logo-area { display: flex; align-items: center; justify-content: center; gap: 10px; background: rgba(255, 255, 255, 0.1); padding: 10px 20px; border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-        .logo-icon { font-size: 28px; color: #ff4757; }
-        .logo-text { font-size: 22px; font-weight: bold; letter-spacing: 1px; background: linear-gradient(to right, #ff4757, #ff6b81); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo-icon { font-size: 24px; color: #ff4757; }
+        .logo-text { font-size: 20px; font-weight: bold; letter-spacing: 1px; background: linear-gradient(to right, #ff4757, #ff6b81); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
@@ -37,9 +37,14 @@
         
         /* Seat Design */
         .seat { display: flex; flex-direction: column; align-items: center; position: relative; cursor: pointer; }
-        .avatar { width: 55px; height: 55px; border-radius: 50%; background: #222831; border: 2px dashed #00adb5; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #00adb5; transition: all 0.3s; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
+        .avatar { width: 55px; height: 55px; border-radius: 50%; background: #222831; border: 2px dashed #00adb5; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #00adb5; transition: all 0.3s; box-shadow: 0 4px 8px rgba(0,0,0,0.3); background-size: cover; background-position: center; }
         .seat-name { font-size: 11px; margin-top: 6px; color: #eee; font-weight: 500; text-shadow: 1px 1px 2px #000; text-align: center; max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .seat.occupied .avatar { border-style: solid; background: #0f3460; color: #fff; }
+        
+        /* Active talking glow ring on seat */
+        .seat.talking .avatar { box-shadow: 0 0 0 4px #00fff2, 0 0 15px #00fff2; animation: waveGlow 1.2s infinite ease-in-out; }
+        @keyframes waveGlow { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+        .seat.occupied .avatar { border-style: solid; color: transparent; }
         
         /* Floating Emoji on Seats */
         .emoji-bubble { position: absolute; top: -20px; background: rgba(0,0,0,0.8); border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 18px; opacity: 0; transform: translateY(10px); transition: all 0.3s; pointer-events: none; z-index: 10; }
@@ -60,11 +65,13 @@
         /* Row 3: Members Grid (6 Seats) */
         .members-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px 10px; justify-items: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
 
-        /* Controls (Mute/Unmute) */
+        /* Controls Area (Mute/Unmute & Leave Seat) */
         .controls-bar { display: flex; justify-content: center; gap: 20px; background: rgba(0,0,0,0.4); padding: 12px; border-radius: 15px; }
         .btn-control { background: #0f3460; color: white; border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
         .btn-control:hover { transform: scale(1.05); }
-        .btn-control.active { background: #ff4757; }
+        .btn-control.active { background: #00adb5; box-shadow: 0 0 12px #00fff2; }
+        .btn-leave { background: #ff4757; display: none; } /* শুরুতে হাইড থাকবে, সিটে বসলে শো করবে */
+        .btn-leave:hover { background: #ff6b81; }
 
         /* Gift Box & Coins */
         .gift-box { background: rgba(255, 255, 255, 0.08); border-radius: 15px; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.1); }
@@ -96,17 +103,21 @@
 </head>
 <body>
 
-<!-- Step 1: Name Input Pop-up (Sign Up) -->
+<!-- Step 1: Member Registration Pop-up -->
 <div class="login-overlay" id="loginOverlay">
     <div class="login-box">
         <i class="fa-solid fa-radio login-logo"></i>
         <div class="login-title">Sathi Audio Live</div>
-        <input type="text" id="usernameInput" class="login-input" placeholder="আপনার সুন্দর নামটি লিখুন..." maxlength="15" onkeypress="handleLoginKeyPress(event)">
-        <button class="btn-enter" onclick="enterRoom()">রুমে প্রবেশ করুন</button>
+        
+        <input type="text" id="usernameInput" class="login-input" placeholder="আপনার সুন্দর নামটি লিখুন..." maxlength="15">
+        <input type="tel" id="userPhoneInput" class="login-input" placeholder="মোবাইল নম্বর (ঐচ্ছিক)..." maxlength="11">
+        <input type="text" id="userPhotoInput" class="login-input" placeholder="প্রোফাইল ছবির লিংক/URL (ঐচ্ছিক)...">
+        
+        <button class="btn-enter" onclick="enterRoom()">সদস্য হয়ে রুমে প্রবেশ করুন</button>
     </div>
 </div>
 
-<!-- Header (Always Visible after Enter) -->
+<!-- Header -->
 <div class="header" id="appHeader" style="display: none;">
     <div class="logo-area">
         <i class="fa-solid fa-radio logo-icon"></i>
@@ -120,66 +131,71 @@
     <div class="stage">
         <!-- Admin Row (1 Big Seat) -->
         <div class="admin-row">
-            <div class="seat admin-seat" id="seat-1" onclick="toggleSeat(1)">
+            <div class="seat admin-seat" id="seat-1" onclick="handleSeatClick(1)">
                 <div class="emoji-bubble" id="bubble-1"></div>
-                <div class="avatar"><i class="fa-solid fa-crown"></i></div>
-                <div class="seat-name" id="name-1">১. এডমিন সিট</div>
+                <div class="avatar" id="avatar-1"><i class="fa-solid fa-crown"></i></div>
+                <div class="seat-name" id="name-1">১. Admin সিট</div>
             </div>
         </div>
 
         <!-- Co-Admin Row (2 Seats) -->
         <div class="co-admin-row">
-            <div class="seat co-admin-seat" id="seat-2" onclick="toggleSeat(2)">
+            <div class="seat co-admin-seat" id="seat-2" onclick="handleSeatClick(2)">
                 <div class="emoji-bubble" id="bubble-2"></div>
-                <div class="avatar"><i class="fa-solid fa-user-shield"></i></div>
+                <div class="avatar" id="avatar-2"><i class="fa-solid fa-user-shield"></i></div>
                 <div class="seat-name" id="name-2">২. কো-এডমিন</div>
             </div>
-            <div class="seat co-admin-seat" id="seat-3" onclick="toggleSeat(3)">
+            <div class="seat co-admin-seat" id="seat-3" onclick="handleSeatClick(3)">
                 <div class="emoji-bubble" id="bubble-3"></div>
-                <div class="avatar"><i class="fa-solid fa-user-shield"></i></div>
+                <div class="avatar" id="avatar-3"><i class="fa-solid fa-user-shield"></i></div>
                 <div class="seat-name" id="name-3">৩. কো-এডমিন</div>
             </div>
         </div>
 
         <!-- Members Grid (6 General Seats) -->
         <div class="members-grid">
-            <div class="seat" id="seat-4" onclick="toggleSeat(4)">
+            <div class="seat" id="seat-4" onclick="handleSeatClick(4)">
                 <div class="emoji-bubble" id="bubble-4"></div>
-                <div class="avatar">৪</div>
+                <div class="avatar" id="avatar-4">৪</div>
                 <div class="seat-name" id="name-4">ফ্রি সিট</div>
             </div>
-            <div class="seat" id="seat-5" onclick="toggleSeat(5)">
+            <div class="seat" id="seat-5" onclick="handleSeatClick(5)">
                 <div class="emoji-bubble" id="bubble-5"></div>
-                <div class="avatar">৫</div>
+                <div class="avatar" id="avatar-5">৫</div>
                 <div class="seat-name" id="name-5">ফ্রি সিট</div>
             </div>
-            <div class="seat" id="seat-6" onclick="toggleSeat(6)">
+            <div class="seat" id="seat-6" onclick="handleSeatClick(6)">
                 <div class="emoji-bubble" id="bubble-6"></div>
-                <div class="avatar">৬</div>
+                <div class="avatar" id="avatar-6">৬</div>
                 <div class="seat-name" id="name-6">ফ্রি সিট</div>
             </div>
-            <div class="seat" id="seat-7" onclick="toggleSeat(7)">
+            <div class="seat" id="seat-7" onclick="handleSeatClick(7)">
                 <div class="emoji-bubble" id="bubble-7"></div>
-                <div class="avatar">৭</div>
+                <div class="avatar" id="avatar-7">৭</div>
                 <div class="seat-name" id="name-7">ফ্রি সিট</div>
             </div>
-            <div class="seat" id="seat-8" onclick="toggleSeat(8)">
+            <div class="seat" id="seat-8" onclick="handleSeatClick(8)">
                 <div class="emoji-bubble" id="bubble-8"></div>
-                <div class="avatar">৮</div>
+                <div class="avatar" id="avatar-8">৮</div>
                 <div class="seat-name" id="name-8">ফ্রি সিট</div>
             </div>
-            <div class="seat" id="seat-9" onclick="toggleSeat(9)">
+            <div class="seat" id="seat-9" onclick="handleSeatClick(9)">
                 <div class="emoji-bubble" id="bubble-9"></div>
-                <div class="avatar">৯</div>
+                <div class="avatar" id="avatar-9">৯</div>
                 <div class="seat-name" id="name-9">ফ্রি সিট</div>
             </div>
         </div>
     </div>
 
-    <!-- Live Control Tools (Mute/Unmute) -->
+    <!-- Live Control Tools (Mute/Unmute & Leave Seat Buttons) -->
     <div class="controls-bar">
+        <!-- Mute/Unmute Button -->
         <button class="btn-control" id="muteBtn" onclick="toggleMute()">
             <i id="micIcon" class="fa-solid fa-microphone-slash"></i>
+        </button>
+        <!-- New Leave Seat Button -->
+        <button class="btn-control btn-leave" id="leaveSeatBtn" onclick="leaveCurrentSeat()" title="সিট থেকে নামুন">
+            <i class="fa-solid fa-right-from-bracket"></i>
         </button>
     </div>
 
@@ -194,7 +210,7 @@
             </div>
             <div class="coin-item" onclick="sendGift('🍫 চকলেট')">
                 <i class="fa-solid fa-coins coin-icon"></i>
-                <span class="coin-val">৫০ কয়েন</span>
+                <span class="coin-val">৫ কয়েন</span>
                 <span class="coin-gift">চকলেট</span>
             </div>
             <div class="coin-item" onclick="sendGift('👑 মুকুট')">
@@ -239,131 +255,91 @@
 </div>
 
 <script>
-    const BACKEND_URL = "https://sathi-audio-live.onrender.com";
+    const BACKEND_URL = "https://sathi-audio-live.onrender.com"; 
     const socket = io(BACKEND_URL);
 
     let isMuted = true;
     let currentSeat = null;
-    let myName = "";
+    
+    let myProfile = { name: "", phone: "", photo: "" };
 
-    // পপ-আপ থেকে নাম ইনপুট নিয়ে রুমে ঢোকার ফাংশন
+    // অডিও ইফেক্টস ভেরিয়েবল
+    let audioContext = null;
+    let microphoneStream = null;
+    let delayNode = null;
+    let feedbackGain = null;
+
+    const DEFAULT_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
     function enterRoom() {
         const nameInput = document.getElementById('usernameInput').value.trim();
+        const phoneInput = document.getElementById('userPhoneInput').value.trim();
+        let photoInput = document.getElementById('userPhotoInput').value.trim();
+
         if (!nameInput) {
-            alert("অনুগ্রহ করে একটি নাম লিখুন!");
+            alert("অনুগ্রহ করে আপনার নামটি লিখুন!");
             return;
         }
-        myName = nameInput;
+
+        myProfile.name = nameInput;
+        myProfile.phone = phoneInput;
+        myProfile.photo = photoInput ? photoInput : DEFAULT_AVATAR;
         
-        // পপ-আপ হাইড করা এবং মেইন অ্যাপ শো করা
         document.getElementById('loginOverlay').style.display = 'none';
         document.getElementById('appHeader').style.display = 'flex';
         document.getElementById('appContent').style.display = 'flex';
         
-        addSystemMessage(`👋 ${myName} রুমে যুক্ত হয়েছেন!`);
+        addSystemMessage(`👋 সদস্য ${myProfile.name} রুমে যুক্ত হয়েছেন!`);
     }
 
-    function handleLoginKeyPress(e) {
-        if (e.key === 'Enter') enterRoom();
+    // সিটে ক্লিক হ্যান্ডলার (বসা এবং এক সিট থেকে অন্য সিটে সরাসরি স্থানান্তর)
+    function handleSeatClick(seatId) {
+        // যদি ইউজার অলরেডি এই সিটেই বসা থাকে, তবে ক্লিক করলে কিছু হবে না
+        if (currentSeat === seatId) return;
+
+        // যদি ইউজার অন্য কোনো সিটে অলরেডি বসা থাকে, তবে প্রথমে আগের সিটটি খালি করা হবে
+        if (currentSeat !== null) {
+            clearSeatVisuals(currentSeat);
+        }
+
+        // নতুন সিটে বসানো
+        occupySeatVisuals(seatId);
+        addSystemMessage(`${myProfile.name} এখন সিট নম্বর ${seatId}-এ স্থানান্তরিত হয়েছেন।`);
+        currentSeat = seatId;
+
+        // সিটে বসার পর লিভ বাটন অন করা
+        document.getElementById('leaveSeatBtn').style.display = 'flex';
     }
 
-    // সিটে বসা বা নামার ফাংশন
-    function toggleSeat(seatId) {
-        const seatEl = document.getElementById(`seat-${seatId}`);
-        const nameEl = document.getElementById(`name-${seatId}`);
+    // সিট থেকে ম্যানুয়ালি নেমে যাওয়ার ফাংশন (লাল বাটনের কাজ)
+    function leaveCurrentSeat() {
+        if (currentSeat === null) return;
         
-        if (currentSeat === seatId) {
-            // সিট থেকে নামা
-            seatEl.classList.remove('occupied');
-            nameEl.innerText = (seatId === 1) ? '১. এডমিন সিট' : (seatId === 2 || seatId === 3) ? 'কো-এডমিন' : 'ফ্রি সিট';
-            addSystemMessage(`${myName} সিট থেকে নেমে গেছেন।`);
-            currentSeat = null;
-            
-            // সিট থেকে নামলে স্বয়ংক্রিয় মিউট করা
-            if(!isMuted) toggleMute();
-        } else {
-            // অন্য সিটে বসা
-            if(currentSeat !== null) {
-                alert("আপনি অলরেডি একটি সিটে আছেন! আগে সেটি ছাড়ুন।");
-                return;
-            }
-            seatEl.classList.add('occupied');
-            nameEl.innerText = myName; // এখানে ইউজারের সেট করা নাম শো করবে
-            addSystemMessage(`${myName} এখন সিট নম্বর ${seatId}-এ বসেছেন।`);
-            currentSeat = seatId;
-        }
+        addSystemMessage(`${myProfile.name} সিট থেকে নেমে গেছেন।`);
+        clearSeatVisuals(currentSeat);
+        currentSeat = null;
+
+        // সিট থেকে নামার পর লিভ বাটন এবং মাইক্রোফোন অফ করা
+        document.getElementById('leaveSeatBtn').style.display = 'none';
+        if (!isMuted) toggleMute(); 
     }
 
-    // মিউট-আনমিউট হ্যান্ডলার
-    function toggleMute() {
-        if (!currentSeat) {
-            alert("কথা বলতে হলে প্রথমে যেকোনো একটি সিটে বসুন!");
-            return;
-        }
-        isMuted = !isMuted;
-        const micIcon = document.getElementById('micIcon');
-        const muteBtn = document.getElementById('muteBtn');
+    // সিট খালি করার ভিজ্যুয়াল ফাংশন
+    function clearSeatVisuals(seatId) {
+        const seatEl = document.getElementById(`seat-${seatId}`);
+        const avatarEl = document.getElementById(`avatar-${seatId}`);
+        const nameEl = document.getElementById(`name-${seatId}`);
 
-        if (isMuted) {
-            micIcon.className = "fa-solid fa-microphone-slash";
-            muteBtn.classList.remove('active');
-            addSystemMessage(`${myName} নিজেকে মিউট করেছেন।`);
-        } else {
-            micIcon.className = "fa-solid fa-microphone";
-            muteBtn.classList.add('active');
-            addSystemMessage(`${myName} এখন আনমিউট (কথা বলছেন)।`);
-        }
+        seatEl.classList.remove('occupied', 'talking');
+        avatarEl.style.backgroundImage = 'none';
+        
+        if(seatId === 1) avatarEl.innerHTML = '<i class="fa-solid fa-crown"></i>';
+        else if(seatId === 2 || seatId === 3) avatarEl.innerHTML = '<i class="fa-solid fa-user-shield"></i>';
+        else avatarEl.innerHTML = seatId;
+
+        nameEl.innerText = (seatId === 1) ? '১. Admin সিট' : (seatId === 2 || seatId === 3) ? 'কো-এডমিন' : 'ফ্রি সিট';
     }
 
-    // মেসেজ সেন্ড করা
-    function sendMessage() {
-        const input = document.getElementById('msgInput');
-        const text = input.value.trim();
-        if (!text) return;
-
-        const chatBox = document.getElementById('chatMessages');
-        const msgDiv = document.createElement('div');
-        msgDiv.className = "msg";
-        msgDiv.innerHTML = `<span class="msg-user">${myName}:</span>${text}`;
-        chatBox.appendChild(msgDiv);
-        chatBox.scrollTop = chatBox.scrollHeight;
-
-        input.value = "";
-    }
-
-    function handleKeyPress(e) {
-        if (e.key === 'Enter') sendMessage();
-    }
-
-    function addSystemMessage(text) {
-        const chatBox = document.getElementById('chatMessages');
-        const msgDiv = document.createElement('div');
-        msgDiv.className = "msg msg-sys";
-        msgDiv.innerText = text;
-        chatBox.appendChild(msgDiv);
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }
-
-    // ইমোজি বাবল সিস্টেম
-    function sendEmoji(emoji) {
-        if (!currentSeat) {
-            alert("সিটের ওপর ইমোজি উড়াতে প্রথমে একটি সিটে বসুন!");
-            return;
-        }
-        const bubble = document.getElementById(`bubble-${currentSeat}`);
-        bubble.innerText = emoji;
-        bubble.classList.add('show');
-
-        setTimeout(() => {
-            bubble.classList.remove('show');
-        }, 1500);
-    }
-
-    // গিফট পাঠানো
-    function sendGift(giftName) {
-        addSystemMessage(`🎉 ${myName} রুমে সবাইকে একটি ${giftName} গিফট করেছেন!`);
-    }
-</script>
-
-</body>
-</html>
+    // সিট দখল করার ভিজ্যুয়াল ফাংশন
+    function occupySeatVisuals(seatId) {
+        const seatEl = document.getElementB
