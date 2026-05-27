@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sathi Audio Live</title>
-    <!-- FontAwesome for attractive icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <style>
@@ -19,10 +18,15 @@
         .login-input { width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; padding: 10px 20px; color: white; font-size: 14px; outline: none; text-align: center; margin-bottom: 15px; transition: 0.3s; }
         .login-input:focus { border-color: #00adb5; box-shadow: 0 0 10px rgba(0, 173, 181, 0.4); }
         
-        /* File Upload Custom Styling */
-        .file-label { display: block; width: 100%; background: rgba(255, 71, 87, 0.15); border: 1px dashed #ff4757; color: #ff6b81; border-radius: 30px; padding: 10px 20px; font-size: 14px; cursor: pointer; text-align: center; margin-bottom: 20px; transition: 0.3s; }
-        .file-label:hover { background: rgba(255, 71, 87, 0.25); }
-        #userPhotoInput { display: none; } /* আসল ইনপুট ফাইলটি হাইড থাকবে */
+        /* New Gender Select Design */
+        .gender-title { font-size: 13px; color: #00adb5; margin-bottom: 8px; font-weight: bold; text-align: left; padding-left: 10px; }
+        .gender-box { display: flex; gap: 15px; margin-bottom: 20px; }
+        .gender-option { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; padding: 12px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px; transition: 0.2s; }
+        .gender-option i { font-size: 20px; }
+        .gender-option.male i { color: #3498db; }
+        .gender-option.female i { color: #e84393; }
+        .gender-option:hover { background: rgba(255,255,255,0.1); }
+        .gender-option.selected { background: rgba(0, 173, 181, 0.2); border-color: #00adb5; box-shadow: 0 0 10px rgba(0, 173, 181, 0.3); }
 
         .btn-enter { width: 100%; background: linear-gradient(to right, #00adb5, #00fff2); color: #1a1a2e; font-weight: bold; border: none; padding: 12px; border-radius: 30px; font-size: 16px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(0, 173, 181, 0.3); }
         .btn-enter:hover { transform: scale(1.02); }
@@ -50,7 +54,7 @@
         .seat.talking .avatar { box-shadow: 0 0 0 4px #00fff2, 0 0 15px #00fff2; animation: waveGlow 1.2s infinite ease-in-out; }
         @keyframes waveGlow { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        .seat.occupied .avatar { border-style: solid; color: transparent; }
+        .seat.occupied .avatar { border-style: solid; }
         
         /* Floating Emoji on Seats */
         .emoji-bubble { position: absolute; top: -20px; background: rgba(0,0,0,0.8); border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 18px; opacity: 0; transform: translateY(10px); transition: all 0.3s; pointer-events: none; z-index: 10; }
@@ -61,12 +65,12 @@
         /* Row 1: Admin Seat */
         .admin-row { display: flex; justify-content: center; }
         .admin-seat .avatar { width: 75px; height: 75px; border-color: #ff4757; color: #ff4757; font-size: 28px; border-width: 3px; }
-        .admin-seat.occupied .avatar { border-style: solid; box-shadow: 0 0 15px rgba(255, 71, 87, 0.5); }
+        .admin-seat.occupied .avatar { box-shadow: 0 0 15px rgba(255, 71, 87, 0.5); }
 
         /* Row 2: Co-Admin Seats */
         .co-admin-row { display: flex; justify-content: space-around; padding: 0 40px; }
         .co-admin-seat .avatar { border-color: #ffa502; color: #ffa502; border-width: 2.5px; }
-        .co-admin-seat.occupied .avatar { border-style: solid; box-shadow: 0 0 10px rgba(255, 165, 2, 0.4); }
+        .co-admin-seat.occupied .avatar { box-shadow: 0 0 10px rgba(255, 165, 2, 0.4); }
 
         /* Row 3: Members Grid */
         .members-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px 10px; justify-items: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
@@ -109,7 +113,6 @@
 </head>
 <body>
 
-<!-- Step 1: Member Registration Pop-up -->
 <div class="login-overlay" id="loginOverlay">
     <div class="login-box">
         <i class="fa-solid fa-radio login-logo"></i>
@@ -118,17 +121,22 @@
         <input type="text" id="usernameInput" class="login-input" placeholder="আপনার সুন্দর নামটি লিখুন..." maxlength="15">
         <input type="tel" id="userPhoneInput" class="login-input" placeholder="মোবাইল নম্বর (ঐচ্ছিক)..." maxlength="11">
         
-        <!-- Updated: Gallery Image Chooser Option -->
-        <label for="userPhotoInput" class="file-label" id="fileLabelText">
-            <i class="fa-solid fa-image" style="margin-right: 5px;"></i> গ্যালারি থেকে প্রোফাইল ছবি বাছুন
-        </label>
-        <input type="file" id="userPhotoInput" accept="image/*" onchange="previewFile()">
+        <div class="gender-title">আপনার লিঙ্গ বাছুন (সিটের ছবির জন্য):</div>
+        <div class="gender-box">
+            <div class="gender-option male selected" id="optMale" onclick="selectGender('male')">
+                <i class="fa-solid fa-user-astronaut"></i>
+                <span>ছেলে</span>
+            </div>
+            <div class="gender-option female" id="optFemale" onclick="selectGender('female')">
+                <i class="fa-solid fa-user-ninja"></i>
+                <span>মেয়ে</span>
+            </div>
+        </div>
         
         <button class="btn-enter" onclick="enterRoom()">সদস্য হয়ে রুমে প্রবেশ করুন</button>
     </div>
 </div>
 
-<!-- Header -->
 <div class="header" id="appHeader" style="display: none;">
     <div class="logo-area">
         <i class="fa-solid fa-radio logo-icon"></i>
@@ -136,10 +144,8 @@
     </div>
 </div>
 
-<!-- Step 2: Main Application Interface -->
 <div class="app-content" id="appContent">
     <div class="stage">
-        <!-- Admin Row -->
         <div class="admin-row">
             <div class="seat admin-seat" id="seat-1" onclick="handleSeatClick(1)">
                 <div class="emoji-bubble" id="bubble-1"></div>
@@ -148,7 +154,6 @@
             </div>
         </div>
 
-        <!-- Co-Admin Row -->
         <div class="co-admin-row">
             <div class="seat co-admin-seat" id="seat-2" onclick="handleSeatClick(2)">
                 <div class="emoji-bubble" id="bubble-2"></div>
@@ -162,7 +167,6 @@
             </div>
         </div>
 
-        <!-- Members Grid -->
         <div class="members-grid">
             <div class="seat" id="seat-4" onclick="handleSeatClick(4)">
                 <div class="emoji-bubble" id="bubble-4"></div>
@@ -197,7 +201,6 @@
         </div>
     </div>
 
-    <!-- Live Control Tools -->
     <div class="controls-bar">
         <button class="btn-control" id="muteBtn" onclick="toggleMute()">
             <i id="micIcon" class="fa-solid fa-microphone-slash"></i>
@@ -207,7 +210,6 @@
         </button>
     </div>
 
-    <!-- Coins Gift Box -->
     <div class="gift-box">
         <div class="gift-title"><i class="fa-solid fa-gift"></i> গিফট বক্স (কয়েন সেন্ট)</div>
         <div class="coins-list">
@@ -239,7 +241,6 @@
         </div>
     </div>
 
-    <!-- Comment Section -->
     <div class="chat-section">
         <div class="chat-messages" id="chatMessages">
             <div class="msg msg-sys">Sathi Audio Live রুমে আপনাকে স্বাগতম! ❤️</div>
@@ -260,41 +261,34 @@
             </div>
         </div>
     </div>
-</div>
-
-<script>
+                    </div>
+    <script>
     const BACKEND_URL = "https://sathi-audio-live.onrender.com"; 
     const socket = io(BACKEND_URL);
 
     let isMuted = true;
     let currentSeat = null;
     
-    let myProfile = { name: "", phone: "", photo: "" };
+    let myProfile = { name: "", phone: "", photo: "", gender: "male" };
 
     let audioContext = null;
     let microphoneStream = null;
     let delayNode = null;
     let feedbackGain = null;
 
-    // ডিফল্ট প্রোফাইল পিকচার (যদি ইউজার ছবি সিলেক্ট না করে)
-    const DEFAULT_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+    const AVATAR_MALE = "https://img.freepik.com/premium-vector/avatar-profile-icon_188544-4755.jpg";
+    const AVATAR_FEMALE = "https://img.freepik.com/premium-vector/avatar-profile-icon_188544-4762.jpg";
 
-    // গ্যালারি থেকে ছবি সিলেক্ট করলে তার প্রিভিউ এবং ডেটা রিড করার ফাংশন
-    function previewFile() {
-        const fileInput = document.getElementById('userPhotoInput');
-        const fileLabel = document.getElementById('fileLabelText');
-        const file = fileInput.files[0];
-
-        if (file) {
-            fileLabel.innerHTML = `<i class="fa-solid fa-circle-check" style="color: #00fff2;"></i> ছবি সিলেক্ট করা হয়েছে!`;
-            fileLabel.style.border = "1px solid #00fff2";
-            fileLabel.style.color = "#00fff2";
-
-            const reader = new FileReader();
-            reader.onloadend = function () {
-                myProfile.photo = reader.result; // এটি ছবিকে Base64 স্ট্র্রিং-এ রূপান্তর করে রাখবে
-            }
-            reader.readAsDataURL(file);
+    function selectGender(type) {
+        document.getElementById('optMale').classList.remove('selected');
+        document.getElementById('optFemale').classList.remove('selected');
+        
+        if (type === 'male') {
+            document.getElementById('optMale').classList.add('selected');
+            myProfile.gender = "male";
+        } else {
+            document.getElementById('optFemale').classList.add('selected');
+            myProfile.gender = "female";
         }
     }
 
@@ -310,10 +304,7 @@
         myProfile.name = nameInput;
         myProfile.phone = phoneInput;
         
-        // ইউজার যদি গ্যালারি থেকে ছবি সিলেক্ট না করে তবে ডিফল্ট পিকচার সেট হবে
-        if (!myProfile.photo) {
-            myProfile.photo = DEFAULT_AVATAR;
-        }
+        myProfile.photo = (myProfile.gender === "male") ? AVATAR_MALE : AVATAR_FEMALE;
         
         document.getElementById('loginOverlay').style.display = 'none';
         document.getElementById('appHeader').style.display = 'flex';
@@ -330,7 +321,7 @@
         }
 
         occupySeatVisuals(seatId);
-        addSystemMessage(`${myProfile.name} এখন সিট নম্বর ${seatId}-এ স্থানান্তরিত হয়েছেন।`);
+        addSystemMessage(`${myProfile.name} এখন সিট নম্বর ${seatId}-এ বসেছেন।`);
         currentSeat = seatId;
 
         document.getElementById('leaveSeatBtn').style.display = 'flex';
@@ -348,4 +339,135 @@
     }
 
     function clearSeatVisuals(seatId) {
-        const seat
+        const seatEl = document.getElementById(`seat-${seatId}`);
+        const avatarEl = document.getElementById(`avatar-${seatId}`);
+        const nameEl = document.getElementById(`name-${seatId}`);
+
+        seatEl.classList.remove('occupied', 'talking');
+        avatarEl.style.backgroundImage = 'none';
+        
+        if(seatId === 1) avatarEl.innerHTML = '<i class="fa-solid fa-crown"></i>';
+        else if(seatId === 2 || seatId === 3) avatarEl.innerHTML = '<i class="fa-solid fa-user-shield"></i>';
+        else avatarEl.innerHTML = seatId;
+
+        nameEl.innerText = (seatId === 1) ? '১. Admin সিট' : (seatId === 2 || seatId === 3) ? 'কো-এডমিন' : 'ফ্রি সিট';
+    }
+
+    function occupySeatVisuals(seatId) {
+        const seatEl = document.getElementById(`seat-${seatId}`);
+        const avatarEl = document.getElementById(`avatar-${seatId}`);
+        const nameEl = document.getElementById(`name-${seatId}`);
+
+        seatEl.classList.add('occupied');
+        avatarEl.innerHTML = ''; 
+        avatarEl.style.backgroundImage = `url('${myProfile.photo}')`; 
+        nameEl.innerText = myProfile.name;
+
+        if (!isMuted) seatEl.classList.add('talking');
+    }
+
+    async function toggleMute() {
+        if (currentSeat === null) {
+            alert("কথা বলতে হলে প্রথমে যেকোনো একটি সিটে বসুন!");
+            return;
+        }
+        
+        isMuted = !isMuted;
+        const micIcon = document.getElementById('micIcon');
+        const muteBtn = document.getElementById('muteBtn');
+        const seatEl = document.getElementById(`seat-${currentSeat}`);
+
+        if (isMuted) {
+            micIcon.className = "fa-solid fa-microphone-slash";
+            muteBtn.classList.remove('active');
+            if(seatEl) seatEl.classList.remove('talking'); 
+            addSystemMessage("আপনি নিজেকে মিউট করেছেন।");
+            
+            if (microphoneStream) {
+                microphoneStream.getTracks().forEach(track => track.stop());
+            }
+            if (audioContext) audioContext.close();
+        } else {
+            micIcon.className = "fa-solid fa-microphone";
+            muteBtn.classList.add('active');
+            if(seatEl) seatEl.classList.add('talking'); 
+            addSystemMessage("আপনার মাইক্রোফোন চালু। প্রতিধ্বনি (Echo) ইফেক্ট সক্রিয়!");
+
+            try {
+                microphoneStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                let source = audioContext.createMediaStreamSource(microphoneStream);
+                
+                delayNode = audioContext.createDelay();
+                delayNode.delayTime.value = 0.3; 
+                
+                feedbackGain = audioContext.createGain();
+                feedbackGain.gain.value = 0.4; 
+
+                source.connect(audioContext.destination); 
+                source.connect(delayNode);
+                delayNode.connect(feedbackGain);
+                feedbackGain.connect(delayNode); 
+                feedbackGain.connect(audioContext.destination); 
+                
+            } catch (err) {
+                console.log("মাইক্রোফোন পারমিশন ইরর: ", err);
+                alert("মাইক্রোফোন পারমিশন প্রয়োজন!");
+                isMuted = true;
+                micIcon.className = "fa-solid fa-microphone-slash";
+                muteBtn.classList.remove('active');
+                if(seatEl) seatEl.classList.remove('talking');
+            }
+        }
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('msgInput');
+        const text = input.value.trim();
+        if (!text) return;
+
+        const chatBox = document.getElementById('chatMessages');
+        const msgDiv = document.createElement('div');
+        msgDiv.className = "msg";
+        msgDiv.innerHTML = `<span class="msg-user">${myProfile.name}:</span>${text}`;
+        chatBox.appendChild(msgDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        input.value = "";
+    }
+
+    function handleKeyPress(e) {
+        if (e.key === 'Enter') sendMessage();
+    }
+
+    function addSystemMessage(text) {
+        const chatBox = document.getElementById('chatMessages');
+        const msgDiv = document.createElement('div');
+        msgDiv.className = "msg msg-sys";
+        msgDiv.innerText = text;
+        chatBox.appendChild(msgDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function sendEmoji(emoji) {
+        if (currentSeat === null) {
+            alert("সিটের ওপর ইমোজি উড়াতে প্রথমে একটি সিটে বসুন!");
+            return;
+        }
+        const bubble = document.getElementById(`bubble-${currentSeat}`);
+        bubble.innerText = emoji;
+        bubble.classList.add('show');
+
+        setTimeout(() => { bubble.classList.remove('show'); }, 1500);
+    }
+
+    function sendGift(giftName) {
+        addSystemMessage(`🎉 ${myProfile.name} রুমে সবাইকে একটি ${giftName} গিফট করেছেন!`);
+    }
+</script>
+
+</body>
+</html>
+
+    
